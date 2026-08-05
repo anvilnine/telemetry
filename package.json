@@ -1,0 +1,44 @@
+{
+  "name": "@anvilnine/telemetry",
+  "version": "0.1.0",
+  "description": "Shared analytics and feature-flag wiring for Anvil Nine products.",
+  "license": "MIT",
+  "author": "Zonily Jame",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/anvilnine/telemetry"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist",
+    "browser",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "build:browser": "esbuild src/browser.ts --bundle --format=esm --minify --outfile=browser/telemetry.js",
+    "test": "vitest run",
+    "type-check": "tsc -p tsconfig.json --noEmit"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "esbuild": "^0.28.1",
+    "jsdom": "^30.0.1",
+    "typescript": "^5.6.0",
+    "vitest": "^3.2.7"
+  },
+  "engines": {
+    "node": ">=22"
+  }
+}
