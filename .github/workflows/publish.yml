@@ -1,0 +1,64 @@
+name: Publish to npm
+
+# Publishes on a v* tag using npm Trusted Publishing (OIDC). No NPM_TOKEN, no
+# 2FA prompt, and npm records a provenance attestation linking the tarball to
+# this workflow run.
+#
+# Runs on ubuntu-latest, not the org's self-hosted mac-mini. npm does not
+# support trusted publishing from self-hosted runners yet. This repo is public,
+# so GitHub-hosted minutes are free.
+#
+# One-time setup on npmjs.com, under the package's Settings > Trusted Publisher:
+#   provider: GitHub Actions
+#   organization: anvilnine
+#   repository: telemetry
+#   workflow: publish.yml
+#
+# Cut a release with:
+#   npm version patch|minor|major && git push --follow-tags
+
+on:
+  push:
+    tags: ['v*']
+  workflow_dispatch:
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      # Lets GitHub mint the OIDC token npm exchanges for publish rights.
+      id-token: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          registry-url: https://registry.npmjs.org
+
+      # Trusted publishing needs npm 11.5.1 or newer, which is ahead of what
+      # setup-node bundles.
+      - name: Use an npm that supports trusted publishing
+        run: npm install -g npm@latest
+
+      - run: npm ci
+
+      - run: npm test
+
+      - run: npm run type-check
+
+      - run: npm run build
+
+      # Fails the release rather than shipping a tag that disagrees with the
+      # manifest, which is otherwise easy to miss and impossible to undo.
+      - name: Check the tag matches the version
+        run: |
+          tag="${GITHUB_REF_NAME#v}"
+          pkg="$(node -p "require('./package.json').version")"
+          if [ "$tag" != "$pkg" ]; then
+            echo "Tag $GITHUB_REF_NAME does not match package.json version $pkg"
+            exit 1
+          fi
+
+      - run: npm publish
