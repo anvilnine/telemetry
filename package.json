@@ -3,7 +3,11 @@
   "version": "0.1.0",
   "description": "Shared analytics and feature-flag wiring for Anvil Nine products.",
   "license": "MIT",
-  "author": "Zonily Jame",
+  "author": {
+    "name": "Anvil Nine",
+    "url": "https://anvilnine.com"
+  },
+  "homepage": "https://github.com/anvilnine/telemetry#readme",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/anvilnine/telemetry.git"

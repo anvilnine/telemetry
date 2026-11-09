@@ -102,7 +102,7 @@ Nothing here throws. A dead analytics host loses data and changes nothing else o
 until a surface clears roughly 200 sessions a week. It proves the wiring works while a split would
 still be meaningless.
 
-Three of the four Anvil Nine surfaces are in that state today: anvilnine.com is noindexed,
+Three of the four [Anvil Nine](https://anvilnine.com) surfaces are in that state today: anvilnine.com is noindexed,
 mobrev is pre-launch, and dropkiln.com does not exist yet.
 
 ## Develop
